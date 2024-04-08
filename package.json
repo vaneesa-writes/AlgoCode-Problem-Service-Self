@@ -1,0 +1,16 @@
+{
+  "name": "algo_code_problem_service_self",
+  "version": "1.0.0",
+  "description": "This is a service to add problems to the algo_code project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npx nodemon src/index.js"
+  },
+  "author": "vaneesa_writes",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}
