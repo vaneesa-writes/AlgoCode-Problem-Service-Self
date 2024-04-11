@@ -1,29 +1,54 @@
 const NotImplementedError = require("../error/notImplementedError");
 const NotImplemented = require("../error/notImplementedError");
+const { ProblemRepo } = require("../repository");
+const { ProblemService } = require("../service");
+const { StatusCodes } = require("http-status-codes");
+
+const problemService = new ProblemService(new ProblemRepo());
 
 function pingProblemController(req, res, next) {
   res.status(200).json({ message: "Problem Controller is alive!!!" });
 }
 
-function addProblem(req, res, next) {
+async function addProblem(req, res, next) {
   try {
-    throw new NotImplementedError("Add Problem");
+    console.log(req.body);
+    const addedProblem = await problemService.createProblem(req.body);
+    return res.status(StatusCodes.CREATED).json({
+      success: true,
+      message: "Successfully added the problem",
+      error: {},
+      data: addedProblem,
+    });
   } catch (error) {
     next(error);
   }
 }
 
-function getProblems(req, res, next) {
+async function getAllProblems(req, res, next) {
   try {
-    throw new NotImplementedError("Get Problems");
+    const problems = await problemService.getAllProblems();
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Successfully fetched the problems",
+      error: {},
+      data: problems,
+    });
   } catch (error) {
     next(error);
   }
 }
 
-function getProblem(req, res, next) {
+async function getProblem(req, res, next) {
   try {
-    throw new NotImplementedError("Get Problem");
+    // console.log(req.params.id);
+    const problem = await problemService.getProblem(req.params.id);
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Successfully fetched the problem",
+      error: {},
+      data: problem,
+    });
   } catch (error) {
     next(error);
   }
@@ -37,9 +62,15 @@ function updateProblem(req, res, next) {
   }
 }
 
-function deleteProblem(req, res, next) {
+async function deleteProblem(req, res, next) {
   try {
-    throw new NotImplementedError("Delete Problem");
+    const problem = await problemService.deleteProblem(req.params.id);
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Successfully deleted the problem",
+      error: {},
+      data: problem,
+    });
   } catch (error) {
     next(error);
   }
@@ -48,7 +79,7 @@ function deleteProblem(req, res, next) {
 module.exports = {
   pingProblemController,
   addProblem,
-  getProblems,
+  getAllProblems,
   getProblem,
   updateProblem,
   deleteProblem,

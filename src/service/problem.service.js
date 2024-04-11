@@ -5,10 +5,10 @@ class ProblemService {
   async getAllProblems() {
     return await this.problemRepo.getAllProblems();
   }
-  async getProblem() {
+  async getProblem(id) {
     return await this.problemRepo.getProblem(id);
   }
-  async deleteProblem() {
+  async deleteProblem(id) {
     return await this.problemRepo.deleteProblem(id);
   }
   async createProblem(problemData) {

@@ -4,10 +4,12 @@ const { Problem } = require("../models");
 class ProblemRepo {
   async createProblem(problemData) {
     try {
-      problem = await Problem.create({
+      const problem = await Problem.create({
         title: problemData.title,
         description: problemData.description,
-        testcases: problemData.testcases ? problemData.testcases : [],
+        testCases: problemData.testCases
+          ? problemData.testCases
+          : { input: "", output: "" },
         difficulty: problemData.difficulty,
       });
       return problem;
@@ -17,9 +19,9 @@ class ProblemRepo {
     }
   }
 
-  async getAllProblem() {
+  async getAllProblems() {
     try {
-      problems = await Problem.find({});
+      const problems = await Problem.find({});
       if (!problems) throw new NotFoundError("Problems", "any");
       return problems;
     } catch (error) {
@@ -30,7 +32,7 @@ class ProblemRepo {
 
   async getProblem(id) {
     try {
-      problem = await Problem.findById(id);
+      const problem = await Problem.findById(id);
       if (!problem) throw new NotFoundError("Problem", id);
       return problem;
     } catch (error) {
@@ -40,7 +42,7 @@ class ProblemRepo {
   }
   async deleteProblem(id) {
     try {
-      deletedProblem = await Problem.findByIdAndDelete(id);
+      const deletedProblem = await Problem.findByIdAndDelete(id);
       if (!deletedProblem) throw new NotFoundError("Problem", id);
       return deletedProblem;
     } catch (error) {
