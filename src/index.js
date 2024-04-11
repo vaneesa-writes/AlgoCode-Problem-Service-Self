@@ -3,6 +3,7 @@ const { PORT } = require("./config/server.config");
 const apiRouter = require("./routes");
 const errorHandler = require("./utils/errorHandler");
 const connectToDB = require("./config/db.config");
+const { Problem } = require("./models");
 
 app = express();
 
