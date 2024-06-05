@@ -16,13 +16,13 @@ const problemSchema = mongoose.Schema({
   },
   testCases: {
     input: {
-      type: String,
+      type: [String],
       required: true,
     },
     output: {
-      type: String,
+      type: [String],
       required: true,
-    },
+    }
   },
   editorail: String,
 });

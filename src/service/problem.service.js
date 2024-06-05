@@ -1,3 +1,5 @@
+const sanitizeMarked = require("../utils/sanitizeMarked");
+
 class ProblemService {
   constructor(problemRepo) {
     this.problemRepo = problemRepo;
@@ -12,7 +14,9 @@ class ProblemService {
     return await this.problemRepo.deleteProblem(id);
   }
   async createProblem(problemData) {
-    return await this.problemRepo.createProblem(problemData);
+    const sanitizedMarkDownString = sanitizeMarked(problemData);
+
+    return await this.problemRepo.createProblem(sanitizedMarkDownString);
   }
 }
 

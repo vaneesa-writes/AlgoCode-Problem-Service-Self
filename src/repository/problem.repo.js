@@ -1,55 +1,51 @@
 const NotFoundError = require("../error/notFoundError");
-const { Problem } = require("../models");
+const logger = require("../config/logger.config");
+const {Problem} = require("../models");
+const {getRelativePathToProjectRoot} = require("../utils/filePathFinder");
 
 class ProblemRepo {
-  async createProblem(problemData) {
-    try {
-      const problem = await Problem.create({
-        title: problemData.title,
-        description: problemData.description,
-        testCases: problemData.testCases
-          ? problemData.testCases
-          : { input: "", output: "" },
-        difficulty: problemData.difficulty,
-      });
-      return problem;
-    } catch (error) {
-      console.log(error);
-      throw error;
+    async createProblem(problemData) {
+        try {
+            return await Problem.create({
+                title: problemData.title,
+                description: problemData.description,
+                testCases: problemData.testCases
+                    ? problemData.testCases
+                    : {input: "", output: ""},
+                difficulty: problemData.difficulty,
+            });
+        } catch (error) {
+            logger.error(`${getRelativePathToProjectRoot(__filename)} : Problem with ${id} not found in the db`)
+            throw error;
+        }
     }
-  }
 
-  async getAllProblems() {
-    try {
-      const problems = await Problem.find({});
-      if (!problems) throw new NotFoundError("Problems", "any");
-      return problems;
-    } catch (error) {
-      console.log(error);
-      throw error;
+    async getAllProblems() {
+        const problems = await Problem.find({});
+        if (!problems) {
+            logger.error(`${getRelativePathToProjectRoot(__filename)} : Problems not found in the db`)
+            throw new NotFoundError("Problems", "any");
+        }
+        return problems;
     }
-  }
 
-  async getProblem(id) {
-    try {
-      const problem = await Problem.findById(id);
-      if (!problem) throw new NotFoundError("Problem", id);
-      return problem;
-    } catch (error) {
-      console.log(error);
-      throw error;
+    async getProblem(id) {
+        const problem = await Problem.findById(id);
+        if (!problem) {
+            logger.error(`${getRelativePathToProjectRoot(__filename)} : Problem with ${id} not found in the db`)
+            throw new NotFoundError("Problem", id);
+        }
+        return problem;
     }
-  }
-  async deleteProblem(id) {
-    try {
-      const deletedProblem = await Problem.findByIdAndDelete(id);
-      if (!deletedProblem) throw new NotFoundError("Problem", id);
-      return deletedProblem;
-    } catch (error) {
-      console.log(error);
-      throw error;
+
+    async deleteProblem(id) {
+        const deletedProblem = await Problem.findByIdAndDelete(id);
+        if (!deletedProblem) {
+            logger.error(`${getRelativePathToProjectRoot(__filename)} : Problem with ${id} not found in the db`)
+            throw new NotFoundError("Problem", id);
+        }
+        return deletedProblem;
     }
-  }
 }
 
 module.exports = ProblemRepo;
